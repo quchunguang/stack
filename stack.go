@@ -3,28 +3,38 @@ package stack
 import "container/list"
 
 type Stack struct {
+	sem  chan int
 	list *list.List
 }
 
 // NewStack create a new stack.
 func New() *Stack {
+	sem := make(chan int, 1)
 	list := list.New()
-	return &Stack{list}
+	return &Stack{sem, list}
 }
 
 // Push item to stack.
 func (stack *Stack) Push(value interface{}) {
+	stack.sem <- 1
 	stack.list.PushBack(value)
+	<-stack.sem
 }
 
 // Pop item from stack.
 func (stack *Stack) Pop() interface{} {
+	stack.sem <- 1
 	e := stack.list.Back()
 	if e != nil {
 		stack.list.Remove(e)
-		return e.Value
 	}
-	return nil
+	<-stack.sem
+
+	if e != nil {
+		return e.Value
+	} else {
+		return nil
+	}
 }
 
 // Peak get the top item of the stack.

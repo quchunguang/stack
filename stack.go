@@ -15,20 +15,20 @@ func New() *Stack {
 }
 
 // Push item to stack.
-func (stack *Stack) Push(value interface{}) {
-	stack.sem <- 1
-	stack.list.PushBack(value)
-	<-stack.sem
+func (s *Stack) Push(value interface{}) {
+	s.sem <- 1
+	s.list.PushBack(value)
+	<-s.sem
 }
 
 // Pop item from stack.
-func (stack *Stack) Pop() interface{} {
-	stack.sem <- 1
-	e := stack.list.Back()
+func (s *Stack) Pop() interface{} {
+	s.sem <- 1
+	e := s.list.Back()
 	if e != nil {
-		stack.list.Remove(e)
+		s.list.Remove(e)
 	}
-	<-stack.sem
+	<-s.sem
 
 	if e != nil {
 		return e.Value
@@ -38,8 +38,8 @@ func (stack *Stack) Pop() interface{} {
 }
 
 // Peak get the top item of the stack.
-func (stack *Stack) Peak() interface{} {
-	e := stack.list.Back()
+func (s *Stack) Peak() interface{} {
+	e := s.list.Back()
 	if e != nil {
 		return e.Value
 	}
@@ -48,11 +48,11 @@ func (stack *Stack) Peak() interface{} {
 }
 
 // Len get the length of the stack.
-func (stack *Stack) Len() int {
-	return stack.list.Len()
+func (s *Stack) Len() int {
+	return s.list.Len()
 }
 
 // Empty tests if the stack is empty.
-func (stack *Stack) Empty() bool {
-	return stack.list.Len() == 0
+func (s *Stack) Empty() bool {
+	return s.list.Len() == 0
 }

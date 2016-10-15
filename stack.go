@@ -7,7 +7,7 @@ type Stack struct {
 }
 
 // NewStack create a new stack.
-func NewStack() *Stack {
+func New() *Stack {
 	list := list.New()
 	return &Stack{list}
 }

@@ -2,14 +2,16 @@ package stack
 
 import "container/list"
 
+// Stack is describe as a list with lock
 type Stack struct {
 	sem  chan int
 	list *list.List
 }
 
+// CallbackFunc type describe any operation on each element in stack.
 type CallbackFunc func(val interface{}) bool
 
-// NewStack create a new stack.
+// New create a new stack.
 func New() *Stack {
 	sem := make(chan int, 1)
 	list := list.New()
